@@ -9,19 +9,19 @@
 P = euler
 
 # object files
-O1 = main.o problem2.o problem3.o
+O1 = old_main.o problem2.o problem3.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
 LFLAGS = -lpthread
 
 # make
-all: $(O1)
+old: $(O1)
 	gcc $(O1) -o $(P) $(LFLAGS)
 
 # make object files
-main.o: main.c
-	gcc -c $(CFLAGS) main.c
+old_main.o: old_main.c
+	gcc -c $(CFLAGS) old_main.c
 	
 problem2.o: problem2.c
 	gcc -c $(CFLAGS) problem2.c
