@@ -16,10 +16,16 @@ CFLAGS = -std=gnu99 -Wall
 LFLAGS = -lpthread
 
 # make
+current: main.o
+	gcc main.o -o $(P) $(LFLAGS)
+
 old: $(O1)
 	gcc $(O1) -o $(P) $(LFLAGS)
 
 # make object files
+main.o: main.c
+	gcc -c $(CFLAGS) main.c
+
 old_main.o: old_main.c
 	gcc -c $(CFLAGS) old_main.c
 	
