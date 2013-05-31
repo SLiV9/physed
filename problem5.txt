@@ -1,0 +1,44 @@
+First, we write the numbers 2 to 20 in their prime factors:
+2
+3
+2 2
+5
+2 3
+7
+2 2 2
+3 3
+2 5
+11
+2 2 3
+13
+2 7
+3 5
+2 2 2 2
+17
+2 3 3
+19
+2 2 5
+Then we go down the list and scratch numbers that are already in the list.
+2
+3
+. 2
+5
+. .
+7
+. . 2
+. 3
+. .
+11
+. . .
+13
+. .
+. .
+. . . 2
+17
+. . .
+19
+. . .
+
+The answer is the product of the numbers currently on the list:
+2^4 * 3^2 * 5 * 7 * 11 * 13 * 17 * 19 = 232792560
+
