@@ -9,7 +9,7 @@
 P = euler
 
 # object files
-O1 = main.o old_main.o problem2.o problem3.o
+O1 = main.o old_main.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
@@ -28,12 +28,6 @@ main.o: main.c
 
 old_main.o: old_main.c
 	gcc -c $(CFLAGS) old_main.c
-	
-problem2.o: problem2.c
-	gcc -c $(CFLAGS) problem2.c
-	
-problem3.o: problem3.c
-	gcc -c $(CFLAGS) problem3.c
 
 # clean
 clean:
