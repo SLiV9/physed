@@ -9,7 +9,7 @@
 P = euler
 
 # object files
-O1 = old_main.o problem2.o problem3.o
+O1 = main.o old_main.o problem2.o problem3.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
