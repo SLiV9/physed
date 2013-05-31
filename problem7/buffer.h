@@ -1,0 +1,3 @@
+#define BUFFERSIZE 1<<16
+//#define MAXVALUE 1000000
+#define NPRIMES 10001
