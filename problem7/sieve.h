@@ -1,10 +1,3 @@
-#include "buffer.h"
+#define NTHREADS 8
 
-#define NSIEVES 8
-
-typedef struct sieve
-{
-  struct sieve *next;
-  unsigned long buffer[BUFFERSIZE];
-  unsigned long primes[NPRIMES];
-}
+void* sieve(void* arg);

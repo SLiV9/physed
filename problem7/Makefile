@@ -10,19 +10,28 @@
 P = euler
 
 # object files
-O1 = main.o
+O1 = main.o genny.o buffer.o sieve.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
 LFLAGS = -lpthread
 
 # make
-main: main.o
-	gcc main.o -o $(P) $(LFLAGS)
+main: $(O1)
+	gcc $(O1) -o $(P) $(LFLAGS)
 
 # make object files
 main.o: main.c
 	gcc -c $(CFLAGS) main.c
+
+genny.o: genny.c
+	gcc -c $(CFLAGS) genny.c
+
+buffer.o: buffer.c
+	gcc -c $(CFLAGS) buffer.c
+
+sieve.o: sieve.c
+	gcc -c $(CFLAGS) sieve.c
 
 # clean
 clean:
