@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem 7 ]\n\n\n");
     
-    unsigned long highest_prime = 5;
+    unsigned long last_prime, highest_prime = 5;
     unsigned int prime_index = 3;
     
     IsRunning = 1;
@@ -49,8 +49,6 @@ int main(int argc, char** argv)
     }
     spawn_thread(first);
     
-    unsigned long last_prime;
-    
     while (highest_prime < MAXVALUE && prime_index < NPRIMES)
     {
       last_prime = get(last);
@@ -66,12 +64,25 @@ int main(int argc, char** argv)
         
         highest_prime = last_prime;
         prime_index++;
-        printf("%d:\t %lu\n", prime_index, highest_prime);
+        printf("%d\t -\t %lu\n", prime_index, highest_prime);
         if (highest_prime < MAXVALUE && prime_index < NPRIMES)
         {
           buffer* b = init_buffer(0);
+          pthread_mutex_lock(last->bufferlock);
           last->next = b;
           last->prime = last_prime;
+            printf("\t[");
+            for (int j = 0; j < last->size; j++)
+            {
+              printf("\t %lu", last->buffer[(last->index + j) % BUFFERSIZE]);
+            }
+            printf("\t |");
+            for (int j = last->size; j < BUFFERSIZE; j++)
+            {
+              printf("\t %lu", last->buffer[(last->index + j) % BUFFERSIZE]);
+            }
+            printf("\t] & %lu\n", last->extra);
+          pthread_mutex_unlock(last->bufferlock);
           if (threads_spawned < NTHREADS)
           {
             spawn_thread(last);
@@ -102,30 +113,44 @@ int main(int argc, char** argv)
     
     printf("The %uth prime is %lu.\n", prime_index, highest_prime);
     
+    printf("\n");
     int i = 3;
     buffer* b = first;
     while (b)
     {
       printf("%d\t -\t %lu\n", i, b->prime);
+      printf("\t[");
+      for (int j = 0; j < b->size; j++)
+      {
+        printf("\t %lu", b->buffer[(b->index + j) % BUFFERSIZE]);
+      }
+      printf("\t |");
+      for (int j = b->size; j < BUFFERSIZE; j++)
+      {
+        printf("\t %lu", b->buffer[(b->index + j) % BUFFERSIZE]);
+      }
+      printf("\t] & %lu\n", b->extra);
       b = b->next;
       i++;
     }
     printf("\n");
     
-    i = 3;
+    //i = 3;
     buffer* b1 = first;
     buffer* b2;
     while (b1)
     {
-      printf("\t %d", i);
+      //printf("\t %d", i);
       b2 = b1->next;
       free(b1);
       b1 = b2;
-      i++;
+      //i++;
     }
     printf("\n");
   
     pthread_attr_destroy(&ptattr);
+    
+    printf("The %uth prime is %lu.\n", prime_index, highest_prime);
 
     printf("\n\n[ done ]\n");
 

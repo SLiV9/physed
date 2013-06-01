@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sched.h>
+#include <pthread.h>
 
 #include "buffer.h"
 
@@ -19,11 +20,18 @@ buffer* init_buffer(unsigned long p)
   B->size = 0;
   B->extra = 0;
   
+  B->bufferlock = malloc(sizeof(pthread_mutex_t));
+  pthread_mutex_init(B->bufferlock, NULL);
+  
   return B;
 }
 
 void free_buffer(buffer* B)
 {
+  if (B)
+  {
+    pthread_mutex_destroy(B->bufferlock);
+  }
   free(B);
 }
 
@@ -37,8 +45,10 @@ char add(buffer* B, unsigned long x)
   
   if (B->size < BUFFERSIZE)
   {
+    pthread_mutex_lock(B->bufferlock);
     B->buffer[(B->index + B->size) % BUFFERSIZE] = x;
     B->size += 1;
+    pthread_mutex_unlock(B->bufferlock);
     return 1;
   }
 
@@ -55,9 +65,11 @@ unsigned long get(buffer* B)
   
   if (B->size > 0)
   {
+    pthread_mutex_lock(B->bufferlock);
     unsigned long x = B->buffer[B->index];
     B->index = (B->index + 1) % BUFFERSIZE;
     B->size -= 1;
+    pthread_mutex_unlock(B->bufferlock);
     return x;
   }
   

@@ -1,4 +1,4 @@
-#define BUFFERSIZE (1<<4)
+#define BUFFERSIZE (1<<1)
 #define MAXVALUE 1000000000
 #define NPRIMES 100
 
@@ -14,6 +14,7 @@ typedef struct buffer
   unsigned long prime;
   unsigned int index, size;
   unsigned long extra;
+  pthread_mutex_t *bufferlock;
 } buffer;
 
 void yield();

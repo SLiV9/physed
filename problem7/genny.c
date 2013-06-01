@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "buffer.h"
 
@@ -15,6 +16,7 @@ void* generate(void* arg)
     {
       yield();
     }
+    //printf("\tGenny: \t%lu\n", x);
     coin = !coin;
   }
   

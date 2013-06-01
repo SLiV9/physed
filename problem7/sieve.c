@@ -1,52 +1,47 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
 
 #include "buffer.h"
 #include "sieve.h"
 
-char sieveit(buffer* B)
+void sieveit(buffer* B)
 {
   unsigned long x;
-  char dirty = 0;
   
-  if ((x = B->next->extra))
+  if ((x = B->extra))
   {
     if (add(B->next, x))
     {
-      B->next->extra = 0;
-      dirty = 1;
+      B->extra = 0;
     }
   }
   
-  if ((B->next->extra == 0) && (x = get(B)))
+  if ((B->extra == 0) && (x = get(B)))
   {
-    dirty = 1;
-    if (1 || x % B->prime != 0)
+    if (x % B->prime != 0)
     {
-      B->next->extra = x;
+      B->extra = x;
     }
   }
-  
-  return dirty;
 }
 
 void* sieve(void* arg)
 {
   buffer* B = (buffer*) arg;
   buffer* b;
-  char dirty;
   
   printf("\t[%lu] \tHello!\n", B->prime);
   
   while (IsRunning)
   {
     b = B;
-    dirty = 0;
     
     while (b && b->prime)
     {
-      printf("\t[%lu] \t#%lu.\n", B->prime, b->prime);
-      dirty = (sieveit(b) || dirty);
+      //printf("\t[%lu] \t#%lu#\n", B->prime, b->prime);
+      sieveit(b);
+      
       for (int i = 0; i < NTHREADS; i++)
       {
         b = b->next;
@@ -55,11 +50,7 @@ void* sieve(void* arg)
       }
     }
     
-    if (!dirty)
-    {
-      printf("\t[%lu] \t...\n", B->prime);
-      yield();
-    }
+    yield();
   }
   
   return NULL;

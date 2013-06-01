@@ -41,5 +41,6 @@ clean:
 realclean:
 	rm -f $(O1)
 	rm -f $(P)
+	rm -f output*
 	rm -f *~
 	
