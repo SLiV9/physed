@@ -5,6 +5,7 @@
 
 #include "buffer.h"
 
+/* Allocates and initialises a buffer. */
 buffer* init_buffer(unsigned long p)
 {
   buffer* B = malloc(sizeof(buffer));
@@ -26,6 +27,7 @@ buffer* init_buffer(unsigned long p)
   return B;
 }
 
+/* Frees a buffer. */
 void free_buffer(buffer* B)
 {
   if (B)
@@ -35,6 +37,7 @@ void free_buffer(buffer* B)
   free(B);
 }
 
+/* Tries to add a number to a buffer, and returns 1 if succesful. */
 char add(buffer* B, unsigned long x)
 {
   if (!B)
@@ -55,6 +58,8 @@ char add(buffer* B, unsigned long x)
   return 0;
 }
 
+/* Tries to take a number from the buffer and returns it value; if unsuccesful, 
+ * 0 is returned instead. */
 unsigned long get(buffer* B)
 {
   if (!B)
@@ -76,6 +81,7 @@ unsigned long get(buffer* B)
   return 0;
 }
 
+/* Yields the thread, creating room for other threads to continue first. */
 void yield()
 {
   if (sched_yield())

@@ -3,6 +3,8 @@
 
 #include "buffer.h"
 
+/* Genny's main method. Fills a buffer with odd numbers, starting with 5, 
+ * continuing alternatingly with +2 and +4; e.g. 5, 7, 11, 13, 17, 19, 23, 25.*/
 void* generate(void* arg)
 {
   buffer* B = (buffer*) arg;

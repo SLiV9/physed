@@ -5,6 +5,9 @@
 #include "buffer.h"
 #include "sieve.h"
 
+/* Tries to add one number from the extra slot to the next buffer.
+ * Tries to take one number from the buffer; if it is not divisible by the 
+ * prime, puts it in the extra slot. */
 void sieveit(buffer* B)
 {
   unsigned long x;
@@ -26,6 +29,8 @@ void sieveit(buffer* B)
   }
 }
 
+/* The sieve's main method. Keeps sieving numbers from its buffers to their 
+ * next buffers. */
 void* sieve(void* arg)
 {
   buffer* B = (buffer*) arg;

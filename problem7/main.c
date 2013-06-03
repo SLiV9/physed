@@ -13,6 +13,7 @@ static pthread_t PT[NTHREADS];
 static pthread_t Genny;
 static pthread_attr_t ptattr;
 
+/* The spawn thread macro creates a thread and assigns a buffer to it. */
 void spawn_thread(buffer* B)
 {
   printf("Spawning thread %d.\n", threads_spawned);
@@ -25,6 +26,7 @@ void spawn_thread(buffer* B)
   threads_spawned += 1;
 }
 
+/* The main thread method. */
 int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem 7 ]\n\n\n");
