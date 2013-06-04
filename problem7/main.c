@@ -26,6 +26,22 @@ void spawn_thread(buffer* B)
   threads_spawned += 1;
 }
 
+void print_buffer(buffer* b, int index)
+{
+  printf("%d\t -\t %lu", index, b->prime);
+  printf("\t[");
+  for (int j = 0; j < b->size; j++)
+  {
+    printf("\t %lu", b->buffer[(b->index + j) % BUFFERSIZE]);
+  }
+  printf("\t |");
+  for (int j = b->size; j < BUFFERSIZE; j++)
+  {
+    printf("\t %lu", b->buffer[(b->index + j) % BUFFERSIZE]);
+  }
+  printf("\t] & %lu\n", b->extra);
+}
+
 /* The main thread method. */
 int main(int argc, char** argv)
 {
@@ -66,30 +82,25 @@ int main(int argc, char** argv)
         
         highest_prime = last_prime;
         prime_index++;
-        printf("%d\t -\t %lu\n", prime_index, highest_prime);
         if (highest_prime < MAXVALUE && prime_index < NPRIMES)
         {
           buffer* b = init_buffer(0);
           pthread_mutex_lock(last->bufferlock);
           last->next = b;
           last->prime = last_prime;
-            printf("\t[");
-            for (int j = 0; j < last->size; j++)
-            {
-              printf("\t %lu", last->buffer[(last->index + j) % BUFFERSIZE]);
-            }
-            printf("\t |");
-            for (int j = last->size; j < BUFFERSIZE; j++)
-            {
-              printf("\t %lu", last->buffer[(last->index + j) % BUFFERSIZE]);
-            }
-            printf("\t] & %lu\n", last->extra);
+          print_buffer(last, prime_index);
           pthread_mutex_unlock(last->bufferlock);
           if (threads_spawned < NTHREADS)
           {
             spawn_thread(last);
           }
           last = b;
+        }
+        else
+        {
+          pthread_mutex_lock(last->bufferlock);
+          print_buffer(last, prime_index);
+          pthread_mutex_unlock(last->bufferlock);
         }
       }
       else
@@ -120,18 +131,7 @@ int main(int argc, char** argv)
     buffer* b = first;
     while (b)
     {
-      printf("%d\t -\t %lu\n", i, b->prime);
-      printf("\t[");
-      for (int j = 0; j < b->size; j++)
-      {
-        printf("\t %lu", b->buffer[(b->index + j) % BUFFERSIZE]);
-      }
-      printf("\t |");
-      for (int j = b->size; j < BUFFERSIZE; j++)
-      {
-        printf("\t %lu", b->buffer[(b->index + j) % BUFFERSIZE]);
-      }
-      printf("\t] & %lu\n", b->extra);
+      print_buffer(b, i);
       b = b->next;
       i++;
     }
