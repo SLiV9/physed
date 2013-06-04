@@ -14,8 +14,8 @@ buffer* init_buffer()
     exit(-1);
   }
   
-  B->start_index = 0;
-  B->current_size = 0;
+  B->index = 0;
+  B->size = 0;
   
   B->bufferlock = malloc(sizeof(pthread_mutex_t));
   pthread_mutex_init(B->bufferlock, NULL);

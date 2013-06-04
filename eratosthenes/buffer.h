@@ -1,6 +1,6 @@
 #define BUFFERSIZE (1<<1)
 
-/* A buffer for storing natural (i.e. positive whole) numbers. */
+/* A FIFO buffer for storing natural (i.e. positive whole) numbers. */
 typedef struct buffer
 {
   unsigned long data[BUFFERSIZE];
