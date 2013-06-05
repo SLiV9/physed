@@ -29,6 +29,7 @@ void free_buffer(buffer* B)
   if (B)
   {
     pthread_mutex_destroy(B->bufferlock);
+    free(B->bufferlock);
     free(B);
   }
 }
