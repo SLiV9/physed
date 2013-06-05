@@ -1,4 +1,3 @@
-#define MAXVALUE 1000000000
 #define LISTSIZE 100
 #define NTHREADS 8
 

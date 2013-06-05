@@ -5,41 +5,101 @@
 #include "buffer.h"
 #include "sieve.h"
 
-#define FIRSTPRIME 5
-#define PRIMEOFFSET 3
-
 #define ST_OFF 0
-#define ST_RUNNING 1
-#define ST_DONE 2
+#define ST_READY 1
+#define ST_RUNNING 2
+#define ST_DONE 3
+#define ST_FREE 4
 
-unsigned long prime_list[LISTSIZE];
-unsigned long transfer_list[LISTSIZE];
-buffer buffer_list[LISTSIZE];
+unsigned long prime[LISTSIZE];
 unsigned int listlength;
 
+static unsigned long transfer[LISTSIZE];
+static buffer* buff[LISTSIZE];
+
 static pthread_t PT[NTHREADS];
+static int PTID[NTHREADS];
 static pthread_attr_t ptattr;
 
-char State = ST_OFF;
+static char State = ST_OFF;
+
+void* segment(void* arg)
+{
+  printf("Hai!\n");
+  return NULL;
+}
 
 void init_sieve()
 {
-  listlength = 0;
+  if (State != ST_OFF)
+  {
+    printf("{ warning } Sieve already initialised.\n");
+    return;
+  }
+  
+  prime[0] = 2;
+  transfer[0] = 3;
+  buff[0] = init_buffer();
+  for (int i = 1; i < LISTSIZE; i++)
+  {
+    prime[i] = 0;
+    transfer[i] = 0;
+    buff[i] = NULL;
+  }
+  listlength = 1;
+  
+  pthread_attr_init(&ptattr);
+  pthread_attr_setscope(&ptattr, PTHREAD_SCOPE_SYSTEM);
+  
+  for (int i = 0; i < NTHREADS; i++)
+  {
+    PTID[i] = i + 1;
+    if (pthread_create(&PT[i], &ptattr, &segment, &PTID[i]))
+    {
+      printf("{ fatal error } Could not create pthread %d.\n", i);
+      exit(-1);
+    }
+  }
+  
+  State = ST_READY;
 }
 
 void free_sieve()
 {
+  if (State != ST_DONE)
+  {
+    printf("{ warning } Sieve has not finished or already freed.\n");
+    return;
+  }
+  
+  for (int i = 0; i < NTHREADS; i++)
+  {
+    if (pthread_join(PT[i], NULL))
+    {
+      printf("{ error } Could not join pthread %d.\n", i);
+    }
+  }
+  
+  for (int i = 0; i < LISTSIZE; i++)
+  {
+    if (buff[i])
+    {
+      free_buffer(buff[i]);
+    }
+  }
+  
+  State = ST_FREE;
 }
 
 void start()
 {
-  if (State == ST_OFF)
+  if (State == ST_READY)
   {
     State = ST_RUNNING;
   }
   else
   {
-    printf("{ error } Sieve already started.\n");
+    printf("{ warning } Sieve not yet ready or already started.\n");
   }
 }
 
@@ -51,6 +111,6 @@ void end()
   }
   else
   {
-    printf("{ error } Sieve not running.\n");
+    printf("{ warning } Sieve not running.\n");
   }
 }
