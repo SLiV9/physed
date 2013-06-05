@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <sched.h>
 
 #include "buffer.h"
 #include "sieve.h"
@@ -10,6 +11,7 @@
 #define ST_RUNNING 2
 #define ST_DONE 3
 #define ST_FREE 4
+#define EMPTY 0
 
 unsigned long prime[LISTSIZE];
 unsigned int listlength;
@@ -25,7 +27,49 @@ static char State = ST_OFF;
 
 void* segment(void* arg)
 {
-  printf("Hai!\n");
+  int id = *((int*) arg);
+  
+  printf("[S%d]\t Ready.\n", id);
+  
+  while (State < ST_RUNNING)
+  {
+    sched_yield();
+  }
+  
+  while (State == ST_RUNNING)
+  {
+    if (id == NTHREADS)
+    {
+      if (add(buff[0], transfer[0]))
+      {
+        transfer[0] += 2;
+      }
+    }
+    
+    unsigned long x;
+    
+    for (int pos = id; pos < listlength; pos += NTHREADS)
+    {
+      if ((x = transfer[pos]))
+      {
+        if (add(buff[pos], x))
+        {
+          transfer[pos] = EMPTY;
+        }
+      }
+      
+      if (transfer[pos] == EMPTY)
+      {
+        if ((x = get(buff[pos])))
+        {
+          transfer[pos] = x;
+        }
+      }
+    }
+  }
+  
+  printf("[S%d]\t Done.\n", id);
+  
   return NULL;
 }
 
