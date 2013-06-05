@@ -8,7 +8,7 @@
 P = main
 
 # object files
-O1 = main.o buffer.o
+O1 = main.o buffer.o sieve.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
@@ -24,6 +24,9 @@ main.o: main.c
 
 buffer.o: buffer.c
 	gcc -c $(CFLAGS) buffer.c
+
+sieve.o: sieve.c
+	gcc -c $(CFLAGS) sieve.c
 
 # clean
 clean:
