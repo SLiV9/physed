@@ -13,8 +13,7 @@
 #define ST_FREE 4
 #define EMPTY 0
 
-unsigned long prime[LISTSIZE];
-unsigned int listlength;
+static unsigned int listlength;
 
 static unsigned long transfer[LISTSIZE];
 static buffer* buff[LISTSIZE];
@@ -60,9 +59,12 @@ void* segment(void* arg)
       
       if (transfer[pos] == EMPTY)
       {
-        if ((x = get(buff[pos])))
+        if ((x = get(buff[pos - 1])))
         {
-          transfer[pos] = x;
+          if (x % prime[pos] != 0)
+          {
+            transfer[pos] = x;
+          }
         }
       }
     }
@@ -71,6 +73,37 @@ void* segment(void* arg)
   printf("[S%d]\t Done.\n", id);
   
   return NULL;
+}
+
+unsigned long get_prime()
+{
+  if (listlength > LISTSIZE)
+  {
+    printf("{ error } All %lu primes calculated.\n", (unsigned long) LISTSIZE);
+    return NOMORE;
+  }
+  
+  unsigned long p = get(buff[listlength - 1]);
+  prime[listlength] = p;
+  return p;
+}
+
+void advance(unsigned long p)
+{
+  if (!p || p == NOMORE)
+  {
+    printf("{ warning } Prime given is %lu.\n", p);
+    return;
+  }
+  
+  if (listlength >= LISTSIZE)
+  {
+    printf("{ warning } Cannot advance; already full.\n");
+    return;
+  }
+  
+  buff[listlength] = init_buffer();
+  listlength++;
 }
 
 void init_sieve()
