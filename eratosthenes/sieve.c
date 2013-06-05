@@ -40,8 +40,6 @@ void* segment(void* arg)
 {
   int id = *((int*) arg);
   
-  printf("[S%d]\t Ready.\n", id);
-  
   while (State < ST_RUNNING)
   {
     sched_yield();
@@ -81,8 +79,6 @@ void* segment(void* arg)
       }
     }
   }
-  
-  printf("[S%d]\t Done.\n", id);
   
   return NULL;
 }
@@ -181,6 +177,8 @@ void free_sieve()
       free_buffer(buff[i]);
     }
   }
+  
+  pthread_attr_destroy(&ptattr);
   
   State = ST_FREE;
 }

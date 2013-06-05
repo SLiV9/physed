@@ -3,7 +3,7 @@
 
 #include "sieve.h"
 
-#define PRIME_INDEX 10
+#define PRIME_INDEX 10001
 
 /* The main thread method. */
 int main(int argc, char** argv)
@@ -13,24 +13,21 @@ int main(int argc, char** argv)
   unsigned long last_prime;
   
   init_sieve();
-  start();
   
+  printf("Primes:\n");
+  start();
   for (int i = 1; i < PRIME_INDEX; i++)
   {
     while ((last_prime = get_prime()) == BUSY);
+    printf(" %lu \t", last_prime);
     advance();
   }
-  
   end();
+  printf("\n");
+  
   free_sieve();
   
   printf("The 10th prime is %lu.\n", last_prime);
-  
-  printf("\nPrimes:\n");
-  for (int i = 0; i < PRIME_INDEX; i++)
-  {
-    printf("\t%lu", prime[i]);
-  }
   
   printf("\n\n[ done ]\n");
 }

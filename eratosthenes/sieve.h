@@ -1,6 +1,6 @@
 /* If you need more primes, increase LISTSIZE.
  * For more threads, increase NTHREADS. */
-#define LISTSIZE 100
+#define LISTSIZE 16384
 #define NTHREADS 8
 
 /* Intuitive namers; do not change. */
