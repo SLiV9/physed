@@ -18,7 +18,7 @@ int main(int argc, char** argv)
   for (int i = 1; i < PRIME_INDEX; i++)
   {
     while ((last_prime = get_prime()) == BUSY);
-    advance(last_prime);
+    advance();
   }
   
   end();

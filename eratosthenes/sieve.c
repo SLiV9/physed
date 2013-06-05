@@ -6,24 +6,36 @@
 #include "buffer.h"
 #include "sieve.h"
 
+/* Intuitive namer. Do not change. */
+#define EMPTY 0
+
+/* How many primes have been calculated. 0 < listlength <= LISTSIZE. */
+static unsigned int listlength;
+
+/* The transfer slots are used by the segments to implement 'try'-spinning. 
+ * By design, transfer[X] will be a number that was taken from buff[X - 1] and 
+ * is about to be stored in buff[X], for X > 0; transfer[0] is an odd number. */
+static unsigned long transfer[LISTSIZE];
+
+/* The buffers used for storing numbers. By design, buff[X] will only contain 
+ * numbers that are NOT divisible by prime[X]. */
+static buffer* buff[LISTSIZE];
+
+/* Pthreads. */
+static pthread_t PT[NTHREADS];
+static int PTID[NTHREADS];
+static pthread_attr_t ptattr;
+
+/* Sieve states. Increases by default. Do not change. */
 #define ST_OFF 0
 #define ST_READY 1
 #define ST_RUNNING 2
 #define ST_DONE 3
 #define ST_FREE 4
-#define EMPTY 0
-
-static unsigned int listlength;
-
-static unsigned long transfer[LISTSIZE];
-static buffer* buff[LISTSIZE];
-
-static pthread_t PT[NTHREADS];
-static int PTID[NTHREADS];
-static pthread_attr_t ptattr;
-
 static char State = ST_OFF;
 
+/* The main method for segment threads, i.e. the NTHREADS threads created by 
+ * the main thread. */
 void* segment(void* arg)
 {
   int id = *((int*) arg);
@@ -75,6 +87,8 @@ void* segment(void* arg)
   return NULL;
 }
 
+/* If possible, returns the last created prime. If the last primebuffer is 
+ * empty, 0 is returned. (Similar to buffer's get() function.) */
 unsigned long get_prime()
 {
   if (listlength > LISTSIZE)
@@ -88,11 +102,12 @@ unsigned long get_prime()
   return p;
 }
 
-void advance(unsigned long p)
+/* Advances the sieving. */
+void advance()
 {
-  if (!p || p == NOMORE)
+  if (!prime[listlength])
   {
-    printf("{ warning } Prime given is %lu.\n", p);
+    printf("{ warning } Prime not yet calculated.\n");
     return;
   }
   
@@ -106,6 +121,7 @@ void advance(unsigned long p)
   listlength++;
 }
 
+/* Initialises the first buffer and creates the threads. */
 void init_sieve()
 {
   if (State != ST_OFF)
@@ -141,6 +157,7 @@ void init_sieve()
   State = ST_READY;
 }
 
+/* Frees all initialised buffers and destroys the threads. */
 void free_sieve()
 {
   if (State != ST_DONE)
@@ -168,6 +185,7 @@ void free_sieve()
   State = ST_FREE;
 }
 
+/* Starts the sieving. */
 void start()
 {
   if (State == ST_READY)
@@ -180,6 +198,7 @@ void start()
   }
 }
 
+/* Ends the sieving. */
 void end()
 {
   if (State == ST_RUNNING)
