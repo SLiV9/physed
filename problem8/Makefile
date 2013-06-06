@@ -1,7 +1,7 @@
 #
 # Makefile voor Project Euler
 #
-# Sander in 't Veld, mei 2013
+# Sander in 't Veld, juni 2013
 #
 
 
@@ -9,25 +9,19 @@
 P = euler
 
 # object files
-O1 = main.o old_main.o
+O1 = main.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
 LFLAGS = -lpthread
 
 # make
-current: main.o
-	gcc main.o -o $(P) $(LFLAGS)
-
-old: $(O1)
+main: main.o
 	gcc $(O1) -o $(P) $(LFLAGS)
 
 # make object files
 main.o: main.c
 	gcc -c $(CFLAGS) main.c
-
-old_main.o: old_main.c
-	gcc -c $(CFLAGS) old_main.c
 
 # clean
 clean:
