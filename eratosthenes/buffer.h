@@ -1,4 +1,4 @@
-#define BUFFERSIZE (1<<4)
+#define BUFFERSIZE (1<<16)
 
 /* A FIFO buffer for storing natural (i.e. positive whole) numbers. */
 typedef struct buffer
