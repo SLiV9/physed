@@ -9,7 +9,12 @@ int main(int argc, char** argv)
     char digit[1000];
     char bin[1];
     
-    FILE* fdigits = fopen("digits.txt", "r");
+    FILE* fdigits = fopen("data/problem8/digits.txt", "r");
+    if (!fdigits)
+    {
+      perror("fopen error");
+      return -1;
+    }
     
     /* The file consists of 20 lines, each containing 50 digits. */
     for (int i = 0; i < 20; i++)
