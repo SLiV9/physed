@@ -10,9 +10,13 @@ int main(int argc, char** argv)
     char bin[1];
     
     FILE* fdigits = fopen("digits.txt", "r");
+    
+    /* The file consists of 20 lines, each containing 50 digits. */
     for (int i = 0; i < 20; i++)
     {
+      /* Read 50 digits from the file. */
       fread(&digit[50 * i], sizeof(char), 50, fdigits);
+      /* Throw the newline character away. */
       fread(&bin, sizeof(char), 1, fdigits);
     }
     
