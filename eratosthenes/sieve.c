@@ -39,6 +39,7 @@ static char State = ST_OFF;
 void* segment(void* arg)
 {
   int id = *((int*) arg);
+  char progress = 0;
   
   while (State < ST_RUNNING)
   {
@@ -47,11 +48,14 @@ void* segment(void* arg)
   
   while (State == ST_RUNNING)
   {
+    progress = 0;
+    
     if (id == NTHREADS)
     {
       if (add(buff[0], transfer[0]))
       {
         transfer[0] += 2;
+        progress = 1;
       }
     }
     
@@ -64,6 +68,7 @@ void* segment(void* arg)
         if (add(buff[pos], x))
         {
           transfer[pos] = EMPTY;
+          progress = 1;
         }
       }
       
@@ -74,9 +79,15 @@ void* segment(void* arg)
           if (x % prime[pos] != 0)
           {
             transfer[pos] = x;
+            progress = 1;
           }
         }
       }
+    }
+    
+    if (!progress)
+    {
+      sched_yield();
     }
   }
   
