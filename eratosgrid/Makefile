@@ -8,7 +8,7 @@
 P = main
 
 # object files
-O1 = main.o
+O1 = main.o flagmap.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
@@ -21,6 +21,9 @@ main: $(O1)
 # make object files
 main.o: main.c
 	gcc -c $(CFLAGS) main.c
+
+flagmap.o: flagmap.c
+	gcc -c $(CFLAGS) flagmap.c
 
 # clean
 clean:
