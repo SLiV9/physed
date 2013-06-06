@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
-#include <sched.h>
 
 #include "flagmap.h"
 
@@ -19,16 +18,12 @@
 #define SEGMSET(X, D, F) SEGMSET2(X, (BITS_PER_FLAG * D), F)
 #define SEGMSET2(X, BD, F) (X = (F << BD) | ((X >> BD) << BD) | (X % (1 << BD)))
 
-/* Odd positive whole number N. 
- * PICKBLOCK determines which block N belongs to.
- * PICKSEGM determines which segment within its block N belongs to. */
-#define ID(N) ((N / 2) - 1)
-#define PICKBLOCK(N) PICKBLOCK2(ID(N))
-#define PICKBLOCK2(I) (I / FLAGS_PER_BLOCK)
-#define PICKSEGM(N) PICKSEGM(ID(N))
-#define PICKSEGM2(I) ((I % FLAGS_PER_BLOCK) / FLAGS_PER_INT)
-#define PICKOFFSET(N) PICKOFFSET2(ID(N))
-#define PICKOFFSET2(I) (I % FLAGS_PER_INT)
+/* Index, D, where 0 <= D.
+ * PICKBLOCK determines which block D belongs to.
+ * PICKSEGM determines which segment within its block D belongs to. */
+#define PICKBLOCK(D) (D / FLAGS_PER_BLOCK)
+#define PICKSEGM(D) ((D % FLAGS_PER_BLOCK) / FLAGS_PER_INT)
+#define PICKOFFSET(D) (D % FLAGS_PER_INT)
 
 typedef struct block
 {
@@ -36,4 +31,34 @@ typedef struct block
   pthread_mutex_t *blocklock;
 } block;
 
+static int nBlocks;
 
+char get_flag_in_block(block *B, unsigned int d)
+{
+  return WRONG;
+}
+
+char set_flag_in_block(block* B, unsigned int d)
+{
+  return WRONG;
+}
+
+char get_flag(unsigned int d)
+{
+  if (PICKBLOCK(d) >= nBlocks)
+  {
+  return WRONG;
+  }
+  
+  return WRONG;
+}
+
+char set_flag(unsigned int d, char f)
+{
+  if (PICKBLOCK(d) >= nBlocks)
+  {
+  return WRONG;
+  }
+  
+  return WRONG;
+}
