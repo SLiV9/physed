@@ -10,7 +10,7 @@
 #define VAL(D) (2*D + 3)
 #define ID(V) ((V-3) / 2)
 
-#define MAXID ID(1999)
+#define MAXID ID(1999999)
 
 typedef unsigned long natural;
 
@@ -32,9 +32,8 @@ int main(int argc, char** argv)
     printf("[ Project Euler: Problem 10 ]\n\n\n");
     
     natural total = 2;
-    printf("Primes:\t2\n");
+    //printf("Primes:\t2\n");
     clear_bitmap();
-    //print_bitmap();
     
     natural next_prime;
     natural prime_index = 0;
@@ -43,15 +42,14 @@ int main(int argc, char** argv)
       next_prime = VAL(prime_index);
       
       total += next_prime;
-      printf("%lu \t", next_prime);
+      //printf("%lu \t", next_prime);
       filter(next_prime);
       
-      //print_bitmap();
       prime_index++;
     }
-    printf("end.\n\n");
+    //printf("end.\n\n");
     
-    print_bitmap();
+    //print_bitmap();
     
     printf("Total: %lu.\n", total);
 

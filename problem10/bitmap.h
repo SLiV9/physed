@@ -1,4 +1,4 @@
-#define BITMAP_SIZE 1000
+#define BITMAP_SIZE 1000000
 
 typedef char bit;
 
