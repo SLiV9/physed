@@ -2,66 +2,38 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define NPATHS(x,y) npaths[22 * (y) + (x)]
+
 int main(int argc, char** argv)
 {
-    printf("[ Project Euler: Problem 14 ]\n\n\n");
+    printf("[ Project Euler: Problem 15 ]\n\n\n");
     
-    unsigned int collatz[1000000];
-    collatz[0] = 0;
-    collatz[1] = 1;
-    for (unsigned int n = 2; n < 1000000; n++)
+    unsigned long npaths[22 * 22];
+    for (int u = 0; u < 22 * 22; u++)
     {
-      collatz[n] = 0;
+      npaths[u] = 0;
     }
+    NPATHS(20, 20) = 1;
     
-    unsigned int nsteps;
-    unsigned int k;
-    for (unsigned int n = 2; n < 1000000; n++)
+    for (int y = 20; y >= 0; y--)
     {
-      //printf("[ %d ", n);
-      nsteps = 0;
-      k = n;
-      
-      while (k > 1)
+      for (int x = 20; x >= 0; x--)
       {
-        nsteps += 1;
-        if (k % 2 == 0)
-        {
-          k = k / 2;
-        }
-        else
-        {
-          k = 3 * k + 1;
-        }
-        //printf("> %d ", k);
-        
-        if (k < 1000000)
-        {
-        if (collatz[k] != 0)
-        {
-          nsteps += collatz[k];
-          break;
-        }
-        }
-      }
-      
-      collatz[n] = nsteps;
-      //printf("] (%u)\n", nsteps);
-    }
-    
-    unsigned int highest_collatz = 0;
-    unsigned int which_number = 0;
-    for (unsigned int n = 1; n < 1000000; n++)
-    {
-      if (collatz[n] > highest_collatz)
-      {
-        highest_collatz = collatz[n];
-        which_number = n;
+        NPATHS(x,y) += NPATHS(x+1,y) + NPATHS(x,y+1);
       }
     }
     
-    printf("The longest chain starts at %d and has length %u.\n", which_number, 
-        highest_collatz);
+    for (int y = 0; y <= 20; y++)
+    {
+      printf("[ ");
+      for (int x = 0; x <= 20; x++)
+      {
+        printf("%lu ", NPATHS(x,y));
+      }
+      printf("]\n");
+    }
+    
+    printf("There are %lu lattice paths.\n", NPATHS(0,0));
     
     printf("\n\n[ done ]\n");
 
