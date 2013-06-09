@@ -2,100 +2,46 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define DATA(x,y) data[20 * (y) + (x)]
+#define DIGIT(i, t) data[50 * (i) + (t)]
 
 int main(int argc, char** argv)
 {
-    printf("[ Project Euler: Problem 11 ]\n\n\n");
+    printf("[ Project Euler: Problem 13 ]\n\n\n");
     
-    char buffer[4] = "\0\0\0\0";
-    int data[400];
+    char data[5000];
+    char bin;
     
-    FILE* fdigits = fopen("data/problem11/data.txt", "r");
+    FILE* fdigits = fopen("data/problem13/numbers.txt", "r");
     if (!fdigits)
     {
       perror("fopen error");
       return -1;
     }
     
-    printf("Input:\n");
-    /* The file consists of 400 lines, seperated by either a space or a newline 
-     * character. */
-    for (int i = 0; i < 400; i++)
+    /* The file consists of 100 lines, each containing a 50 digit number. */
+    for (int i = 0; i < 100; i++)
     {
-      fread(buffer, sizeof(char), 3, fdigits);
-      printf("%s", buffer);
-      
-      data[i] = ((int) buffer[0] - '0') * 10 + buffer[1] - '0';
+      fread(&data[50 * i], sizeof(char), 50, fdigits);
+      fread(&bin, sizeof(char), 1, fdigits);
     }
-    printf("< end of file >\n\n");
+    
+    for (int u = 0; u < 5000; u++)
+    {
+      data[u] -= '0';
+    }
     
     printf("Numbers:\n");
-    for (int y = 0; y < 20; y++)
+    for (int i = 0; i < 100; i++)
     {
-      for (int x = 0; x < 20; x++)
+      for (int t = 0; t < 50; t++)
       {
-        printf("%d ", DATA(x,y));
+        printf("%d", (int) DIGIT(i, t));
       }
       printf("\n");
     }
     printf("< end of data >\n\n");
     
-    int prod, greatest_product = 0;
-    
-    /* Horizontal groups. */
-    for (int y = 0; y < 20; y++)
-    {
-      for (int x = 0; x < 16; x++)
-      {
-        prod = DATA(x,y) * DATA(x+1,y) * DATA(x+2,y) * DATA(x+3,y);
-        if (prod > greatest_product)
-        {
-          greatest_product = prod;
-        }
-      }
-    }
-    
-    /* Vertical groups. */
-    for (int y = 0; y < 16; y++)
-    {
-      for (int x = 0; x < 20; x++)
-      {
-        prod = DATA(x,y) * DATA(x,y+1) * DATA(x,y+2) * DATA(x,y+3);
-        if (prod > greatest_product)
-        {
-          greatest_product = prod;
-        }
-      }
-    }
-    
-    /* Diagonal-down groups. */
-    for (int y = 0; y < 16; y++)
-    {
-      for (int x = 0; x < 16; x++)
-      {
-        prod = DATA(x,y) * DATA(x+1,y+1) * DATA(x+2,y+2) * DATA(x+3,y+3);
-        if (prod > greatest_product)
-        {
-          greatest_product = prod;
-        }
-      }
-    }
-    
-    /* Diagonal-up groups. */
-    for (int y = 3; y < 20; y++)
-    {
-      for (int x = 0; x < 16; x++)
-      {
-        prod = DATA(x,y) * DATA(x+1,y-1) * DATA(x+2,y-2) * DATA(x+3,y-3);
-        if (prod > greatest_product)
-        {
-          greatest_product = prod;
-        }
-      }
-    }
-    
-    printf("The greatest product is %d.\n", greatest_product);
+    printf("The answer is unknown.\n");
     
     printf("\n\n[ done ]\n");
 
