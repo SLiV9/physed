@@ -2,69 +2,66 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define DIGIT(i, t) data[50 * (i) + 49 - (t)]
-#define SUMDIGIT(t) sum[51 - (t)]
-
 int main(int argc, char** argv)
 {
-    printf("[ Project Euler: Problem 13 ]\n\n\n");
+    printf("[ Project Euler: Problem 14 ]\n\n\n");
     
-    char data[5000];
-    char sum[52];
-    char bin;
-    memset(sum, 0, 52);
-    
-    FILE* fdigits = fopen("data/problem13/numbers.txt", "r");
-    if (!fdigits)
+    unsigned int collatz[1000000];
+    collatz[0] = 0;
+    collatz[1] = 1;
+    for (unsigned int n = 2; n < 1000000; n++)
     {
-      perror("fopen error");
-      return -1;
+      collatz[n] = 0;
     }
     
-    /* The file consists of 100 lines, each containing a 50 digit number. */
-    for (int i = 0; i < 100; i++)
+    unsigned int nsteps;
+    unsigned int k;
+    for (unsigned int n = 2; n < 1000000; n++)
     {
-      fread(&data[50 * i], sizeof(char), 50, fdigits);
-      fread(&bin, sizeof(char), 1, fdigits);
-    }
-    
-    for (int u = 0; u < 5000; u++)
-    {
-      data[u] -= '0';
-    }
-    
-    printf("Numbers:\n");
-    for (int i = 0; i < 100; i++)
-    {
-      for (int t = 0; t < 50; t++)
+      //printf("[ %d ", n);
+      nsteps = 0;
+      k = n;
+      
+      while (k > 1)
       {
-        printf("%d", (int) DIGIT(i, 50 - t));
+        nsteps += 1;
+        if (k % 2 == 0)
+        {
+          k = k / 2;
+        }
+        else
+        {
+          k = 3 * k + 1;
+        }
+        //printf("> %d ", k);
+        
+        if (k < 1000000)
+        {
+        if (collatz[k] != 0)
+        {
+          nsteps += collatz[k];
+          break;
+        }
+        }
       }
-      printf("\n");
+      
+      collatz[n] = nsteps;
+      //printf("] (%u)\n", nsteps);
     }
-    printf("< end of data >\n\n");
     
-    /* Starting at the least significant bit first, we add all the digits. */
-    int w;
-    for (int t = 0; t < 50; t++)
+    unsigned int highest_collatz = 0;
+    unsigned int which_number = 0;
+    for (unsigned int n = 1; n < 1000000; n++)
     {
-      w = 0;
-      w += SUMDIGIT(t);
-      for (int i = 0; i < 100; i++)
+      if (collatz[n] > highest_collatz)
       {
-        w += DIGIT(i, t);
+        highest_collatz = collatz[n];
+        which_number = n;
       }
-      SUMDIGIT(t) = (char) (w % 10);
-      SUMDIGIT(t+1) += (char) ((w / 10) % 10);
-      SUMDIGIT(t+2) += (char) (w / 100);
     }
     
-    printf("The answer is: ");
-    for (int t = 0; t < 52; t++)
-    {
-      printf("%d", (int) sum[t]);
-    }
-    printf(".\n");
+    printf("The longest chain starts at %d and has length %u.\n", which_number, 
+        highest_collatz);
     
     printf("\n\n[ done ]\n");
 

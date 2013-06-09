@@ -13,7 +13,7 @@ O1 = main.o
 
 # flags
 CFLAGS = -std=gnu99 -Wall
-LFLAGS = -lpthread
+LFLAGS = 
 
 # make
 main: main.o
