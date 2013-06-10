@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define SIZE 15
+#define SIZE 100
 #define VAL(x,y) data[SIZE * (y) + (x)]
 
 int main(int argc, char** argv)
@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     char buffer[2];
     char bin[1];
     
-    FILE* fdata = fopen("data/problem18/triangle.txt", "r");
+    FILE* fdata = fopen("data/problem67/triangle.txt", "r");
     for (int y = 0; y < SIZE; y++)
     {
       for (int x = 0; x <= y; x++)
