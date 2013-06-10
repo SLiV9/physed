@@ -1,0 +1,80 @@
+one
++ two
+  ...
++ one thousand
+
+==
+
+one thousand
++ (one ... ninety nine)
++ 100 * (one ... nine)
++ 9 * 100 * hundred
++ 9 * 99 * and
++ 9 * (one ... ninety nine)
+
+==
+
+3 + 8
++ 10 * (one ... ninety nine)
++ 9 * 100 * 7
++ 100 * (one ... nine)
++ 891 * 3
+
+==
+
+11 + 6300 + 2400 + 270 + 3
++ 10 * (one ... ninety nine)
++ 100 * (one ... nine)
+
+==
+
+8984
++ 10 * [
+  (one ... nine)
+  + (ten ... nineteen)
+  + 10 * (twenty ... ninety)
+  + 8 * (one ... nine)
+]
++ 100 * (one ... nine)
+
+==
+
+8984
++ 190 * (one ... nine)
++ 10 * (ten ... nineteen)
++ 100 * (twenty ... ninety)
+
+= 
+
+8984
++ 190 * (one + two + three + four + five + six + seven + eight + nine)
++ 100 * (twenty + thirty + forty + fifty + sixty + seventy + eighty + ninety)
++ 10 * (ten + eleven + twelve + thirteen + fourteen + fifteen + sixteen 
+    + seventeen + eighteen + nineteen)
+
+=
+
+8984
++ 190 * (3 + 3 + 5 + 4 + 4 + 3 + 5 + 5 + 4)
++ 100 * (6 + 6 + 5 + 5 + 5 + 7 + 6 + 6)
++ 10 * (3 + 6 + 6 + 8 + 8 + 7 + 7 + 9 + 8 + 8)
+
+==
+
+8994 + 190 * 36 + 100 * 46 + 10 * 70
+
+==
+
+9000 - 6 + 7200 - 360 + 4600 + 700
+
+==
+
+20000 + 200 + 600 + 700 - 366
+
+==
+
+20000 + 1500 - 300 - 66
+
+==
+
+21154.
