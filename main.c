@@ -9,7 +9,7 @@ int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problems 18 & 67 ]\n\n\n");
     
-    char data[SIZE * SIZE];
+    unsigned long data[SIZE * SIZE];
     char buffer[2];
     char bin[1];
     
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
         fread(buffer, sizeof(char), 2, fdata);
         fread(bin, sizeof(char), 1, fdata);
         
-        VAL(x,y) = 10 * (buffer[0] - '0') + buffer[1] - '0';
+        VAL(x,y) = (unsigned long) 10 * (buffer[0] - '0') + buffer[1] - '0';
       }
     }
     fclose(fdata);
@@ -34,6 +34,24 @@ int main(int argc, char** argv)
       }
       printf("\n");
     }
+    printf("\n");
+    
+    for (int y = SIZE - 2; y >= 0; y--)
+    {
+      for (int x = 0; x <= y; x++)
+      {
+        if (VAL(x,y+1) >= VAL(x+1,y+1))
+        {
+          VAL(x,y) += VAL(x,y+1);
+        }
+        else
+        {
+          VAL(x,y) += VAL(x+1,y+1);
+        }
+      }
+    }
+    
+    printf("The answer is %lu.\n", VAL(0,0));
     
     printf("\n\n[ done ]\n");
 
