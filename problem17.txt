@@ -1,3 +1,57 @@
+### CORRECT ###
+
+What is Q?
+
+Q = one thousand
+  + 100 * (one hundred + ... + nine hundred)
+  + 9 * 99 * and
+  + 10 * (one + ... + ninety-nine)
+  = 11
+  + 100 * H
+  + 891 * 3
+  + 10 * M
+  
+N = one + ... + nine 
+  = 36
+
+H = N + 9 * hundred 
+  = 36 + 63
+  = 99
+  
+Q = 11
+  + 9900
+  + 2673
+  + 10 * M
+  = 12584 + 10 * M
+  
+M = one + ... + ninety-nine
+  = N
+  + (ten + ... nineteen)
+  + 10 * (twenty + ... + ninety)
+  + 8 * N
+  = 9 * N + T + 10 * W
+  
+T = ten + ... + nineteen
+  = 70
+  
+W = twenty + ... + ninety
+  = 46
+  
+M = 9 * N + T + 10 * N
+  = 324 + 70 + 460
+  = 854
+  
+Q = 12584 + 10 * M
+  = 12584 + 8540
+  = 20000 + 1000 + 120 + 4
+  = 21124
+  
+end.
+
+
+
+### WRONG: ###
+
 one
 + two
   ...
