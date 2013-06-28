@@ -8,10 +8,24 @@
 typedef char name[MAXLEN];
 
 name list[NNAMES];
+int alpha[NNAMES];
+unsigned int nNames = 0;
+
+void print_names()
+{
+  printf("Names:\t\t");
+  for (int i = 0; i < nNames; i++)
+  {
+    printf("%12s,\t", list[i]);
+  }
+  printf("\tend.\n");
+}
 
 int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem ]\n\n\n");
+    
+    /* Reading the names from the file. */
     
     FILE* fnames = fopen("data/problem22/names.txt", "r");
     if (!fnames)
@@ -20,7 +34,7 @@ int main(int argc, char** argv)
       return -1;
     }
     
-    unsigned int itm = 0, pos = 0;
+    unsigned int pos = 0;
     char c;
     
     do
@@ -29,13 +43,14 @@ int main(int argc, char** argv)
       
       if (c == ',' || c == EOF)
       {
-        list[itm][pos] = '\0';
-        itm++;
+        list[nNames][pos] = '\0';
+        alpha[nNames] = 0;
+        nNames++;
         pos = 0;
       }
       else if (c != '"')
       {
-        list[itm][pos] = c;
+        list[nNames][pos] = c;
         pos++;
       }
     }
@@ -43,14 +58,11 @@ int main(int argc, char** argv)
     
     fclose(fnames);
     
-    printf("Names:\t\t");
-    for (int i = 0; i < NNAMES; i++)
-    {
-      if (strlen(list[i]) == 0)
-        break;
-      printf("%12s,\t", list[i]);
-    }
-    printf("\tend.\n");
+    print_names();
+    
+    /* Alphabatise the list of names. */
+    
+    
     
     printf("\n\n[ done ]\n");
 
