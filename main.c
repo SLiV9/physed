@@ -2,82 +2,55 @@
 #include <string.h>
 #include <stdlib.h>
 
-/* Year is the actual year, i.e. 1900, 1993, 2013 etc.
- * Month is the month where JAN = 0, DEC = 11, 12 = 0.
- * Day is the day since 31 dec 1899, where Day 1 = 1 Jan 1900, a Monday. */
-typedef int year;
-typedef enum { JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC }
-    month;
-typedef unsigned int day;
+#define NUMBERSIZE 1000
 
-/* A leap year is divisible by 4, but not divisible by 100 unless divisible by 
- * 400. I.e.: a leap year is (divisible by 4) AND ((not divisible by 100)
- * OR (divisible by 400)). I.e., if divisible by 100, a leap year is divisible 
- * by 400 (and therefore by 4); otherwise, a leap year is divisible by 4. */
-char isLeap(year Y)
-{
-  if (Y % 100 == 0)
-    Y = Y / 100;
-    
-  return (Y % 4 == 0);
-}
+typedef char number[NUMBERSIZE];
 
-/* Determine the days of this month. */
-char daysOfMonth(month M, year Y)
+void print_number(number N)
 {
-  static char daysPerMonth[] = { 31, 0, 31, 30, 31, 30, 
-      31, 31, 30, 31, 30, 31 };
-  
-  if (M != FEB)
+  printf("0x");
+  for (int t = NUMBERSIZE-1; t >= 0; t--)
   {
-    return daysPerMonth[M];
+    printf("%d", (int) N[t]);
   }
-  else
-  {
-    return (char) 28 + (isLeap(Y));
-  }
-}
-
-/* Determine if a day is a Sunday, knowing that Day 1, 1 Jan 1900, is a 
- * Monday. */
-char isSunday(day D)
-{
-  return (D % 7 == 0);
+  printf("\n");
 }
 
 int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem ]\n\n\n");
     
-    unsigned int q = 0;
+    number old, new;
+    memset(old, 0, NUMBERSIZE);
+    memset(new, 0, NUMBERSIZE);
+    old[0] = 1;
     
-    day x = 1;
-    month m;
-    year y;
-    
-    /* If x is 1 May, dan x + 31 is 1 June. We visit each 1st of each month of 
-     * each year between 1900 and 2000, but only count sundays after 1900. */
-    for (y = 1900; y <= 2000; y++)
+    /* We can ignore 100, since it does not add any digits apart from two 0's.*/
+    for (int x = 2; x < 100; x++)
     {
-      for (m = JAN; m <= DEC; m++)
+      int d = 0, f = 0;
+      for (int t = 0; t < NUMBERSIZE; t++)
       {
-        if (isSunday(x))
-        {
-          if (y > 1900)
-          {
-            q++;
-          
-            printf("%u:\t1/%i/%i is a Sunday.\n", (unsigned int) x, 
-                (int) m + 1, (int) y);
-          }
-        }
-        
-        x += daysOfMonth(m, y);
+        d = x * old[t] + f;
+        new[t] = (char) (d % 10);
+        f = d / 10;
       }
+      
+      memcpy(old, new, NUMBERSIZE);
+      memset(new, 0, NUMBERSIZE);
     }
     
-    printf("In total, there are %u Sundays between 1 Jan 1901 and 31 Dec "
-        "2000.\n", q);
+    printf("100! = ");
+    print_number(old);
+    
+    int sum = 0;
+    
+    for (int t = 0; t < NUMBERSIZE; t++)
+    {
+      sum += old[t];
+    }
+    
+    printf("\nThe answer is %d.\n", sum);
     
     printf("\n\n[ done ]\n");
 
