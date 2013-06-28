@@ -49,11 +49,30 @@ int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem ]\n\n\n");
     
-    day x = 1;
-    month m = JAN;
-    year y = 1900;
+    unsigned int q = 0;
     
-    x += daysOfMonth(m, y);
+    day x = 1;
+    month m;
+    year y;
+    
+    for (y = 1900; y <= 2000; y++)
+    {
+      for (m = JAN; m <= DEC; m++)
+      {
+        if (isSunday(x))
+        {
+          if (y > 1900)
+          {
+            q++;
+          
+            printf("%u:\t1/%i/%i is a Sunday.\n", (unsigned int) x, 
+                (int) m + 1, (int) y);
+          }
+        }
+        
+        x += daysOfMonth(m, y);
+      }
+    }
     
     printf("\n\n[ done ]\n");
 
