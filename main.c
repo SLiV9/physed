@@ -16,8 +16,8 @@ typedef unsigned int day;
  * by 400 (and therefore by 4); otherwise, a leap year is divisible by 4. */
 char isLeap(year Y)
 {
-  if (Y % 100)
-    Y = Y % 100;
+  if (Y % 100 == 0)
+    Y = Y / 100;
     
   return (Y % 4 == 0);
 }
@@ -55,6 +55,8 @@ int main(int argc, char** argv)
     month m;
     year y;
     
+    /* If x is 1 May, dan x + 31 is 1 June. We visit each 1st of each month of 
+     * each year between 1900 and 2000, but only count sundays after 1900. */
     for (y = 1900; y <= 2000; y++)
     {
       for (m = JAN; m <= DEC; m++)
@@ -73,6 +75,9 @@ int main(int argc, char** argv)
         x += daysOfMonth(m, y);
       }
     }
+    
+    printf("In total, there are %u Sundays between 1 Jan 1901 and 31 Dec "
+        "2000.\n", q);
     
     printf("\n\n[ done ]\n");
 
