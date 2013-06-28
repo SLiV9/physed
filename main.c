@@ -2,46 +2,55 @@
 #include <string.h>
 #include <stdlib.h>
 
-int d(int n)
-{
-  int sum = 1;
-  int i;
-  
-  for (i = 2; i * i < n; i++)
-  {
-    if (n % i == 0)
-    {
-      sum += i;
-      sum += n / i;
-    }
-  }
-  
-  if (i * i == n)
-    sum += i;
-  
-  return sum;
-}
+#define NNAMES 6000
+#define MAXLEN 12
+
+typedef char name[MAXLEN];
+
+name list[NNAMES];
 
 int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem ]\n\n\n");
     
-    int sum = 0;
-    
-    for (int x = 1; x < 10000; x++)
+    FILE* fnames = fopen("data/problem22/names.txt", "r");
+    if (!fnames)
     {
-      int y = d(x);
-      if (y > x)
-      {
-        if (d(y) == x)
-        {
-          sum += x;
-          sum += y;
-        }
-      } 
-    } 
+      perror("fopen error");
+      return -1;
+    }
     
-    printf("Answer: %i.\n", sum);
+    unsigned int itm = 0, pos = 0;
+    char c;
+    
+    do
+    {
+      c = fgetc(fnames);
+      
+      if (c == ',' || c == EOF)
+      {
+        list[itm][pos] = '\0';
+        itm++;
+        pos = 0;
+      }
+      else if (c != '"')
+      {
+        list[itm][pos] = c;
+        pos++;
+      }
+    }
+    while (c != EOF);
+    
+    fclose(fnames);
+    
+    printf("Names:\t\t");
+    for (int i = 0; i < NNAMES; i++)
+    {
+      if (strlen(list[i]) == 0)
+        break;
+      printf("%12s,\t", list[i]);
+    }
+    printf("\tend.\n");
     
     printf("\n\n[ done ]\n");
 
