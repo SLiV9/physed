@@ -2,13 +2,14 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define NNAMES 6000
-#define MAXLEN 12
+#define NNAMES 60
+#define WORDSIZE 12
 
-typedef char name[MAXLEN];
+typedef char word[WORDSIZE];
 
-name list[NNAMES];
-int alpha[NNAMES];
+word name[NNAMES];
+unsigned int alpha[NNAMES];
+unsigned int order[NNAMES];
 unsigned int nNames = 0;
 
 void print_names()
@@ -16,7 +17,7 @@ void print_names()
   printf("Names:\t\t");
   for (int i = 0; i < nNames; i++)
   {
-    printf("%12s,\t", list[i]);
+    printf("%12s,\t", name[i]);
   }
   printf("\tend.\n");
 }
@@ -25,7 +26,9 @@ int main(int argc, char** argv)
 {
     printf("[ Project Euler: Problem ]\n\n\n");
     
-    /* Reading the names from the file. */
+    memset(alpha, 0, sizeof(unsigned int) * NNAMES);
+    
+    /* Open the file. */
     
     FILE* fnames = fopen("data/problem22/names.txt", "r");
     if (!fnames)
@@ -34,33 +37,34 @@ int main(int argc, char** argv)
       return -1;
     }
     
-    unsigned int pos = 0;
-    char c;
-    
-    do
+    /* Read all of the words. */
+    printf("Reading...\n");
+    unsigned int fuckme = 100000;
+    while (!feof(fnames) && nNames < NNAMES && fuckme)
     {
-      c = fgetc(fnames);
-      
-      if (c == ',' || c == EOF)
+      word bfr;
+      fscanf(fnames, "%*[^a-zA-Z]");
+      if (fscanf(fnames, "%12[a-zA-Z]", bfr))
       {
-        list[nNames][pos] = '\0';
+        strcpy(name[nNames], bfr);
         alpha[nNames] = 0;
+        for (int t = 0; t < WORDSIZE; t++)
+        {
+          alpha[nNames] += (bfr[t] - 'A' + 1);
+        }
+        order[nNames] = nNames + 1;
         nNames++;
-        pos = 0;
       }
-      else if (c != '"')
-      {
-        list[nNames][pos] = c;
-        pos++;
-      }
+      
+      fuckme--;
     }
-    while (c != EOF);
+    printf("Read %u words.\n", nNames);
     
     fclose(fnames);
     
     print_names();
     
-    /* Alphabatise the list of names. */
+    /* Calculate the order / 'alphabetise'. */
     
     
     
